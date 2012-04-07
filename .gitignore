@@ -1,0 +1,8 @@
+*.sdf
+*.suo
+*.opensdf
+source/Debug/
+source/ipch/
+source/DCPU-16/Debug
+source/DCPU-16/Release
+source/Release/DCPU-16.pdb

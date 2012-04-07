@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DCPU-16", "DCPU-16\DCPU-16.vcxproj", "{1E790E9E-CC56-4BE5-9E3C-B0CF87E071DB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E790E9E-CC56-4BE5-9E3C-B0CF87E071DB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1E790E9E-CC56-4BE5-9E3C-B0CF87E071DB}.Debug|Win32.Build.0 = Debug|Win32
+		{1E790E9E-CC56-4BE5-9E3C-B0CF87E071DB}.Release|Win32.ActiveCfg = Release|Win32
+		{1E790E9E-CC56-4BE5-9E3C-B0CF87E071DB}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
