@@ -1,0 +1,8 @@
+DCPU-16 Emulator
+
+Implemented using Microsoft Visual C++ 2010 express. Not tested on other systems yet. 
+
+Depends on the stl library for loading a program from disk into memory.
+
+Specifications can be found at:
+http://0x10c.com/doc/dcpu-16.txt
