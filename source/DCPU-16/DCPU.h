@@ -36,7 +36,7 @@ private:
 
 	Word& next();
  	Word& getValue(uint16_t location);
-	static Word size(const Word& instruction);
+	static uint16_t size(const Word& instruction);
 	static bool usesNext(uint16_t value);
 	
 	Word registers[8]; // A, B, C, X, Y, Z, I, J

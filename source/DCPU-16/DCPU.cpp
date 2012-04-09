@@ -131,10 +131,10 @@ void DCPU::start()
 		case AND: a &= b; break;
 		case BOR: a |= b; break;
 		case XOR: a ^= b; break;
-		case IFE: if (a != b)     pc.i += size(next()).i; break;
-		case IFN: if (a == b)     pc.i += size(next()).i; break;
-		case IFG: if (a <= b)     pc.i += size(next()).i; break;
-		case IFB: if ((a & b)==0) pc.i += size(next()).i; break;
+		case IFE: if (a != b)     pc.i += size(next()); break;
+		case IFN: if (a == b)     pc.i += size(next()); break;
+		case IFG: if (a <= b)     pc.i += size(next()); break;
+		case IFB: if ((a & b)==0) pc.i += size(next()); break;
 		}
 	}
 }
@@ -186,13 +186,13 @@ DCPU::Word& DCPU::getValue(uint16_t location)
 	}
 }
 
-DCPU::Word DCPU::size(const Word& instruction)
+uint16_t DCPU::size(const Word& instruction)
 {
-	Word size(0);
+	uint16_t size = 0;
 	if (usesNext(instruction.a))
-		++size.i;
+		++size;
 	if (usesNext(instruction.b))
-		++size.i;
+		++size;
 	return size;
 }
 
