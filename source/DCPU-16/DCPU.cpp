@@ -84,8 +84,8 @@ void DCPU::start()
 	{
 		const Word& instruction = next();
 
-		Word& a = getValue<Word&>(instruction.a);
-		const Word& b = getValue<const Word&>(instruction.b);
+		uint16_t& a = getValue(instruction.a).i;
+		const uint16_t b = getValue(instruction.b).i;
 
 		switch (instruction.o)
 		{
@@ -100,41 +100,41 @@ void DCPU::start()
 			break;
 		case SET: a = b; break;
 		case ADD: 
-			a.i += b.i;
-			o = (int32_t)a.i + (int32_t)b.i > 0xFFFF ? 1 : 0;
+			a += b;
+			o = int32_t(a) + int32_t(b) > 0xFFFF ? 1 : 0;
 			break;
 		case SUB: 
-			a.i -= b.i;
-			o = (int32_t)a.i - (int32_t)b.i < 0 ? 1 : 0;
+			a -= b;
+			o = int32_t(a) - int32_t(b) < 0 ? 1 : 0;
 			break;
 		case MUL:
-			a.i *= b.i;
-			o = (((uint32_t)a.i * (uint32_t)b.i)>>16)&0xFFFF;
+			a *= b;
+			o = ((uint32_t(a) * uint32_t(b))>>16)&0xFFFF;
 			break;
 		case DIV:
-			a.i /= b.i;
-			o = (((uint32_t)a.i<<16)/(uint32_t)b.i)&0xFFFF;
+			a /= b;
+			o = ((uint32_t(a)<<16) / uint32_t(b))&0xFFFF;
 			break;
 		case MOD:
-			if (b.i == 0)
+			if (b == 0)
 				a = 0;
 			else
-				a.i %= b.i;
+				a %= b;
 		case SHL:
-			a.i <<= b.i;
-			o = (((uint32_t)a.i<<(uint32_t)b.i)>>16)&0xFFFF;
+			a <<= b;
+			o = ((uint32_t(a)<<uint32_t(b))>>16)&0xFFFF;
 			break;
 		case SHR:
-			a.i >>= b.i;
-			o = (((uint32_t)a.i<<16)>>(uint32_t)b.i)&0xFFFF;
+			a >>= b;
+			o = ((uint32_t(a)<<16)>>uint32_t(b))&0xFFFF;
 			break;
-		case AND: a.i &= b.i; break;
-		case BOR: a.i |= b.i; break;
-		case XOR: a.i ^= b.i; break;
-		case IFE: if (a.i != b.i)     pc.i += size(next()).i; break;
-		case IFN: if (a.i == b.i)     pc.i += size(next()).i; break;
-		case IFG: if (a.i <= b.i)     pc.i += size(next()).i; break;
-		case IFB: if ((a.i & b.i)==0) pc.i += size(next()).i; break;
+		case AND: a &= b; break;
+		case BOR: a |= b; break;
+		case XOR: a ^= b; break;
+		case IFE: if (a != b)     pc.i += size(next()).i; break;
+		case IFN: if (a == b)     pc.i += size(next()).i; break;
+		case IFG: if (a <= b)     pc.i += size(next()).i; break;
+		case IFB: if ((a & b)==0) pc.i += size(next()).i; break;
 		}
 	}
 }
@@ -144,8 +144,7 @@ DCPU::Word& DCPU::next()
 	return ram[pc.i++];
 }
 
-template <typename T> 
-T DCPU::getValue(uint16_t location)
+DCPU::Word& DCPU::getValue(uint16_t location)
 {
 	switch (location)
 	{
@@ -182,22 +181,22 @@ T DCPU::getValue(uint16_t location)
 	case VAL_NEXT:	return ram[next().i];
 	case NEXT:		return next();
 	default: 
-		buf = Word(location - 0x20); 
+		buf = location - 0x20; 
 		return buf;
 	}
 }
 
-template const DCPU::Word& DCPU::getValue<const DCPU::Word&>(uint16_t location);
-template DCPU::Word& DCPU::getValue<DCPU::Word&>(uint16_t location);
-
 DCPU::Word DCPU::size(const Word& instruction)
 {
 	Word size(0);
-	if ((instruction.a >= 0x10 && instruction.a <= 0.17) || 
-		instruction.a == 0x1E || instruction.a == 0x1F)
+	if (usesNext(instruction.a))
 		++size.i;
-	if ((instruction.b >= 0x10 && instruction.b <= 0.17) || 
-		instruction.b == 0x1E || instruction.b == 0x1F)
+	if (usesNext(instruction.b))
 		++size.i;
 	return size;
+}
+
+bool DCPU::usesNext(uint16_t value)
+{
+	return (value >= VAL_NEXT_A && value <= VAL_NEXT_J) || value == VAL_NEXT || value == NEXT;
 }

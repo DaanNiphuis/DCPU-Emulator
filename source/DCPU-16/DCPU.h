@@ -35,9 +35,10 @@ private:
 	};
 
 	Word& next();
-	template <typename T> T getValue(uint16_t location);
-	static Word size(const Word& instruction);	
-
+ 	Word& getValue(uint16_t location);
+	static Word size(const Word& instruction);
+	static bool usesNext(uint16_t value);
+	
 	Word registers[8]; // A, B, C, X, Y, Z, I, J
 	Word pc; // Program counter
 	Word sp; // Stack pointer
