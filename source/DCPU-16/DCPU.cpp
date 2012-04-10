@@ -163,7 +163,7 @@ DCPU::Word& DCPU::getValue(uint16_t location)
 	case VAL_Y:
 	case VAL_Z:
 	case VAL_I:
-	case VAL_J:	return ram[registers[location-VAL_A].i];
+	case VAL_J: return ram[registers[location-VAL_A].i];
 	case VAL_NEXT_A:
 	case VAL_NEXT_B:
 	case VAL_NEXT_C:
@@ -178,7 +178,7 @@ DCPU::Word& DCPU::getValue(uint16_t location)
 	case SP:		return sp;
 	case PC:		return pc;
 	case O:			return o;
-	case VAL_NEXT:	return ram[next().i];
+	case VAL_NEXT:		return ram[next().i];
 	case NEXT:		return next();
 	default: 
 		buf = location - 0x20; 
