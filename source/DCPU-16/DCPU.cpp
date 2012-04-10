@@ -178,7 +178,7 @@ DCPU::Word& DCPU::getValue(uint16_t location)
 	case SP:		return sp;
 	case PC:		return pc;
 	case O:			return o;
-	case VAL_NEXT:		return ram[next().i];
+	case VAL_NEXT:	return ram[next().i];
 	case NEXT:		return next();
 	default: 
 		buf = location - 0x20; 
