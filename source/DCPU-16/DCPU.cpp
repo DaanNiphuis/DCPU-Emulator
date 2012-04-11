@@ -71,8 +71,8 @@ void DCPU::loadProgram(const char* fileName)
 	unsigned int i = 0;
 	while (file.good())
 	{
-		file.get(ram[i].hi);
 		file.get(ram[i].lo);
+		file.get(ram[i].hi);
 		++i;
 	}
 	file.close();
@@ -131,10 +131,10 @@ void DCPU::start()
 		case AND: a &= b; break;
 		case BOR: a |= b; break;
 		case XOR: a ^= b; break;
-		case IFE: if (a != b)     pc.i += size(next()); break;
-		case IFN: if (a == b)     pc.i += size(next()); break;
-		case IFG: if (a <= b)     pc.i += size(next()); break;
-		case IFB: if ((a & b)==0) pc.i += size(next()); break;
+		case IFE: if (a != b)     skip(); break;
+		case IFN: if (a == b)     skip(); break;
+		case IFG: if (a <= b)     skip(); break;
+		case IFB: if ((a & b)==0) skip(); break;
 		}
 	}
 }
@@ -186,17 +186,26 @@ DCPU::Word& DCPU::getValue(uint16_t location)
 	}
 }
 
-uint16_t DCPU::size(const Word& instruction)
+void DCPU::skip()
 {
-	uint16_t size = 0;
-	if (usesNext(instruction.a))
-		++size;
-	if (usesNext(instruction.b))
-		++size;
-	return size;
+	const Word& instruction = next();
+	if (instruction.o == NON_BASIC)
+	{
+		if (instruction.a == JSR)
+		{
+			++pc.i;
+		}
+	}
+	else
+	{
+		if (readsNext(instruction.a))
+			++pc.i;
+		if (readsNext(instruction.b))
+			++pc.i;
+	}
 }
 
-bool DCPU::usesNext(uint16_t value)
+bool DCPU::readsNext(uint16_t location)
 {
-	return (value >= VAL_NEXT_A && value <= VAL_NEXT_J) || value == VAL_NEXT || value == NEXT;
+	return (location >= VAL_NEXT_A && location <= VAL_NEXT_J) || location == VAL_NEXT || location == NEXT;
 }

@@ -11,7 +11,7 @@ public:
 	DCPU();
 	~DCPU();
 
-	// Copies program from disk directly into memroy.
+	// Copies program from disk into memory.
 	void loadProgram(const char* fileName);
 	void start();
 
@@ -24,8 +24,8 @@ private:
 		uint16_t i;
 		struct 
 		{
-			char lo;
 			char hi;
+			char lo;
 		};
 		struct 
 		{
@@ -39,10 +39,10 @@ private:
 	Word& next();
 	// Convert the location to the actual value. For example 0x0 is the value in register A
  	Word& getValue(uint16_t location);
- 	// Return the number of extra words that the instruction reads.
-	static uint16_t size(const Word& instruction);
-	// Returns true if the value requires a next() call.
-	static bool usesNext(uint16_t value);
+ 	// Skip the next instruction
+	void skip();
+	// Returns true if the value reads the next instruction.
+	static bool readsNext(uint16_t location);
 	
 	Word registers[8]; // A, B, C, X, Y, Z, I, J
 	Word pc; // Program counter
